@@ -30,9 +30,9 @@ open class EasyLoadingShimmer: NSObject {
     
     private var addOffsetflag: Bool?
 
-    /// 开始覆盖子控件
-    public static func startCovering(for view: UIView?) {
-        EasyLoadingShimmer.init().coverSubviews(view: view)
+    /// 开始覆盖子控件 如果view是UITableView才传identifiers
+    public static func startCovering(for view: UIView?, with identifiers: [String]? = ["Cell1", "Cell1", "Cell1", "Cell1", "Cell1"]) {
+        EasyLoadingShimmer.init().coverSubviews(view: view, with: identifiers)
     }
     
     /// 停止覆盖子控件
@@ -40,7 +40,7 @@ open class EasyLoadingShimmer: NSObject {
         EasyLoadingShimmer.init().removeSubviews(view: view)
     }
     
-    private func coverSubviews(view: UIView?) {
+    private func coverSubviews(view: UIView?, with identifiers: [String]?) {
         guard let v = view else {
             NSException(name: NSExceptionName(rawValue: "coverSubviews"), reason: "[(void)coverSubviews:(UIView *)view]:view is nil", userInfo: nil).raise()
             return
@@ -52,13 +52,15 @@ open class EasyLoadingShimmer: NSObject {
             }
         }
         
-        let coverableCellsIds: [String] = ["Cell1", "Cell1", "Cell1", "Cell1", "Cell1"]
-        if v.isMember(of: UITableView.self) {
-            for (index, _) in coverableCellsIds.enumerated() {
-                getTableViewPath(view: v, index: index, coverableCellsIds: coverableCellsIds)
+//        let coverableCellsIds: [String] = ["Cell1", "Cell1", "Cell1", "Cell1", "Cell1"]
+        if let coverableCellsIds = identifiers {
+            if v.isMember(of: UITableView.self) {
+                for (index, _) in coverableCellsIds.enumerated() {
+                    getTableViewPath(view: v, index: index, coverableCellsIds: coverableCellsIds)
+                }
+                addCover(view: v)
+                return
             }
-            addCover(view: v)
-            return
         }
         
         v.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
@@ -102,10 +104,8 @@ open class EasyLoadingShimmer: NSObject {
             for cellSub in cell.contentView.subviews {
                 let defaultCoverblePath = UIBezierPath(roundedRect: cellSub.bounds, cornerRadius: cellSub.frame.size.height / 2.0)
                 var offsetPoint = cellSub.convert(cellSub.bounds, to: tableView).origin
-                if index == 0 {
-                    if offsetPoint.y > cellSub.frame.origin.y {
-                        addOffsetflag = true
-                    }
+                if index == 0, offsetPoint.y > cellSub.frame.origin.y {
+                    addOffsetflag = true
                 }
                 if let flag = addOffsetflag, flag {
                     offsetPoint.y -= headerOffset

@@ -25,24 +25,23 @@ class TableViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        numberOfRows = 0
-        numberOfSections = 0
         
         view.addSubview(tableView)
+        
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.play, target: self, action: #selector(startLoading))
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.stop, target: self, action: #selector(stopLoading))
 
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        EasyLoadingShimmer.startCovering(for: tableView)
+        EasyLoadingShimmer.startCovering(for: tableView, with: ["Cell1", "Cell1", "Cell1", "Cell1", "Cell1"])
     }
     
     @objc func startLoading() {
         numberOfSections = 0
         numberOfRows = 0
         tableView.reloadData()
-        EasyLoadingShimmer.startCovering(for: tableView)
+        EasyLoadingShimmer.startCovering(for: tableView, with: ["Cell1", "Cell1", "Cell1", "Cell1", "Cell1"])
     }
     
     @objc func stopLoading() {
