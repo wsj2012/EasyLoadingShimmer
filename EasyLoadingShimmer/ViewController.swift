@@ -2,8 +2,8 @@
 //  ViewController.swift
 //  EasyLoadingShimmer
 //
-//  Created by 王树军(金融壹账通客户端研发团队) on 2019/1/11.
-//  Copyright © 2019年 王树军(金融壹账通客户端研发团队). All rights reserved.
+//  Created by sj_w on 2019/1/11.
+//  Copyright © 2019年 sj_w. All rights reserved.
 //
 
 import UIKit
